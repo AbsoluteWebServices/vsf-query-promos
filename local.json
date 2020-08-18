@@ -1,0 +1,7 @@
+{
+  "queryPromos": {
+    "paramNames": {
+      "addToCartFromQuery": "cart"
+    }
+  }
+}
