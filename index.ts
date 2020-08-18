@@ -1,6 +1,13 @@
 import { StorefrontModule } from '@vue-storefront/core/lib/modules'
 import { afterEach as routerAfterEach } from './router/afterEach'
 
+export const defaultModuleSettings = [
+  {
+    param: 'cart',
+    function: 'addToCartFromQuery'
+  }
+]
+
 export const QueryPromosModule: StorefrontModule = function ({ router }) {
   router.afterEach(routerAfterEach)
 }
