@@ -1,5 +1,5 @@
 import store from '@vue-storefront/core/store'
-import { prepareProductsToAdd } from '@vue-storefront/core/modules/cart/helpers'
+import prepareProductsToAdd from '../helpers/coreFallback/prepareProductsToAdd'
 import { getProducts } from '../helpers'
 
 export default async function addToCartFromQuery (queryParams: string | string[]): Promise<void> {

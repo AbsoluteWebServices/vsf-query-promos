@@ -1,4 +1,4 @@
-import { StorefrontModule } from '@vue-storefront/core/lib/modules'
+import { VueStorefrontModule, VueStorefrontModuleConfig } from '@vue-storefront/core/lib/module'
 import { afterEach as routerAfterEach } from './router/afterEach'
 
 export const defaultModuleSettings = [
@@ -8,6 +8,11 @@ export const defaultModuleSettings = [
   }
 ]
 
-export const QueryPromosModule: StorefrontModule = function ({ router }) {
-  router.afterEach(routerAfterEach)
+export const KEY = 'query-promos'
+
+const moduleConfig: VueStorefrontModuleConfig = {
+  key: KEY,
+  router: { afterEach: routerAfterEach }
 }
+
+export const QueryPromosModule = new VueStorefrontModule(moduleConfig)
