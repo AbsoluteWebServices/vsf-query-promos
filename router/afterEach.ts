@@ -3,21 +3,21 @@ import config from 'config'
 import { isServer } from '@vue-storefront/core/helpers'
 import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
 import { KEY, defaultModuleSettings } from '../index'
-import { changeLocationQuery } from '../helpers'
 import functions from '../functions/'
 import rootStore from '@vue-storefront/core/store'
+import * as types from '../store/mutation-types'
 
 function afterEach (to: Route, from: Route): void {
   const settings = config.queryPromos || defaultModuleSettings
 
-  if (!isServer && Object.keys(to.query).length !== 0) {
-    const params = { ...to.query }
-
+  if (!isServer) {
     for (const promo of settings) {
-      if (params.hasOwnProperty(promo.param)) {
-        const paramValue = params[promo.param]
+      if (rootStore.getters[`${KEY}/hasParam`](promo.param)) {
         const promoFunction = () => {
+          const paramValue = rootStore.getters[`${KEY}/getParamValue`](promo.param)
+
           functions[promo.function](paramValue)
+          rootStore.commit(`${KEY}/${types.CLEAR_PARAM}`, { param: promo.param })
 
           if (promo.event) {
             EventBus.$off(promo.event, promoFunction)
@@ -29,12 +29,8 @@ function afterEach (to: Route, from: Route): void {
         } else {
           promoFunction()
         }
-
-        delete params[promo.param]
       }
     }
-
-    changeLocationQuery(to, params)
   }
 }
 
