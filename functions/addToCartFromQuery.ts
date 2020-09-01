@@ -5,6 +5,10 @@ import { getProducts } from '../helpers'
 export default async function addToCartFromQuery (queryParams: string | string[]): Promise<void> {
   let items = []
 
+  if (typeof queryParams === 'undefined' || !queryParams) {
+    return
+  }
+
   if (typeof queryParams === 'string') {
     items = queryParams.split(',')
   } else {
