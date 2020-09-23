@@ -9,6 +9,9 @@ export const mutations: MutationTree<QueryPromosState> = {
   [types.SET_PARAM] (state, { param, value }) {
     state.params[param] = value
   },
+  [types.SET_PARAMS] (state, params) {
+    state.params = params
+  },
   [types.CLEAR_PARAM] (state, { param }) {
     delete state.params[param]
   }

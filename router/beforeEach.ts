@@ -19,7 +19,10 @@ function beforeEach (to: Route, from: Route, next): void {
       }
     }
 
-    if (changed) return next(to)
+    if (changed) {
+      rootStore.dispatch(`${KEY}/saveParams`)
+      return next(to)
+    }
   }
 
   next()

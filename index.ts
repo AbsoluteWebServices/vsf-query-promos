@@ -3,6 +3,7 @@ import { module } from './store'
 import { beforeEach as routerBeforeEach } from './router/beforeEach'
 import { afterEach as routerAfterEach } from './router/afterEach'
 import { afterRegistration } from './hooks/afterRegistration'
+import { initCacheStorage } from '@vue-storefront/core/helpers/initCacheStorage'
 
 export const defaultModuleSettings = [
   {
@@ -12,6 +13,8 @@ export const defaultModuleSettings = [
 ]
 
 export const KEY = 'query-promos'
+
+export const cacheStorage = initCacheStorage(KEY)
 
 const moduleConfig: VueStorefrontModuleConfig = {
   key: KEY,
