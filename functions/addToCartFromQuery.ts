@@ -1,4 +1,6 @@
 import store from '@vue-storefront/core/store'
+import EventBus from '@vue-storefront/core/compatibility/plugins/event-bus'
+import { Logger } from '@vue-storefront/core/lib/logger'
 import prepareProductsToAdd from '../helpers/coreFallback/prepareProductsToAdd'
 import { getProducts } from '../helpers'
 
@@ -30,6 +32,12 @@ export default async function addToCartFromQuery (queryParams: string | string[]
   }
 
   const products = await getProducts(Object.keys(skus))
+
+  if (!products.length) {
+    Logger.warn('Products not found', 'vsf-query-promos')()
+    return
+  }
+
   let productsToAdd = []
 
   for (const product of products) {
@@ -39,5 +47,19 @@ export default async function addToCartFromQuery (queryParams: string | string[]
     }))
   }
 
-  await store.dispatch('cart/addItems', { productsToAdd })
+  const addItems = () => {
+    console.log('addItems')
+    EventBus.$off('servercart-after-diff', addItems)
+    store.dispatch('cart/addItems', { productsToAdd })
+  }
+
+  console.log(store.getters['cart/isSyncRequired'])
+  EventBus.$on('servercart-after-diff', () => {
+    console.log('servercart-after-diff')
+  })
+  if (store.getters['cart/isSyncRequired']) {
+    EventBus.$on('servercart-after-diff', addItems)
+  } else {
+    addItems()
+  }
 }
